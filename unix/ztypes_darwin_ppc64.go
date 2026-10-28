@@ -358,7 +358,7 @@ type FdSet struct {
 
 const (
 	SizeofIfMsghdr    = 0x70
-// DERIVED from LP64 std tables, not C-verified on any machine.
+// C-VERIFIED at ppc64 width (compile-only, Leopard gcc -arch ppc64 -m64); runs/xsys-ppc64-cc-20261028/layouts.txt
 	SizeofIfMsghdr2   = 0xa0
 	SizeofIfData      = 0x60
 // DERIVED from LP64 std tables, not C-verified on any machine.
@@ -383,8 +383,12 @@ type IfMsghdr struct {
 	Data      IfData
 }
 
-// DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
-// DERIVED from LP64 std tables, not C-verified on any machine.
+// LAYOUT C-VERIFIED at ppc64 width (compile-only) on a real Leopard machine: all 11
+// member offsets and the whole size equal C `struct if_msghdr2` under
+// `gcc -arch ppc64 -m64` (size 160); runs/xsys-off64-20261028/receipt.txt. Derived from
+// the darwin/amd64/arm64 LP64 std tables, and no object was executed — pmg5 is down.
+// DECLARED ALIGNMENT DIFFERS, BY ABI: Go claims 8 (inherited from IfData64), the
+// target's C claims 4; see the IfData64 comment for the mechanism and consequence.
 type IfMsghdr2 struct {
 	Msglen     uint16
 	Version    uint8
@@ -431,8 +435,15 @@ type IfData struct {
 	Reserved2  uint32
 }
 
-// DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
-// DERIVED from LP64 std tables, not C-verified on any machine.
+// LAYOUT C-VERIFIED at ppc64 width (compile-only) on a real Leopard machine: all 25
+// member offsets and the whole size equal C `struct if_data64` under
+// `gcc -arch ppc64 -m64` (size 128); runs/xsys-off64-20261028/receipt.txt. Derived
+// from the darwin/amd64/arm64 LP64 std tables, and no object was executed — pmg5 is down.
+// DECLARED ALIGNMENT DIFFERS, BY ABI: Go claims 8, the target's C claims 4, because the
+// PowerPC 64-bit ABI aligns `u_int64_t` (`long long`) to 4 while Go's `uint64` is 8.
+// Offsets and size are unaffected. Consequence: if C ever places this struct at an
+// address congruent to 4 mod 8 (say, after a leading byte field in a C struct), Go's
+// 8-byte loads of the uint64 fields would trap. No such consumer path is known here.
 type IfData64 struct {
 	Type       uint8
 	Typelen    uint8
