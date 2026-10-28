@@ -306,35 +306,35 @@ type ICMPv6Filter struct {
 // LP64 tables; Inet4Pktinfo and IPv6MTUInfo sizes are upstream compatibility
 // values. None is a ppc64 cgo measurement for the corresponding Leopard header.
 const (
-	SizeofSockaddrInet4     = 0x10
-	SizeofSockaddrInet6     = 0x1c
-	SizeofSockaddrAny       = 0x6c
-	SizeofSockaddrUnix      = 0x6a
-	SizeofSockaddrDatalink  = 0x14
-// DERIVED from LP64 std tables, not C-verified on any machine.
-	SizeofSockaddrCtl       = 0x20
-// DERIVED from LP64 std tables, not C-verified on any machine.
-	SizeofXvsockpcb         = 0xa8
-// DERIVED from LP64 std tables, not C-verified on any machine.
-	SizeofXSocket           = 0x64
-// DERIVED from LP64 std tables, not C-verified on any machine.
-	SizeofXSockbuf          = 0x18
-// DERIVED from LP64 std tables, not C-verified on any machine.
-	SizeofXVSockPgen        = 0x20
-// DERIVED from LP64 std tables, not C-verified on any machine.
-	SizeofXucred            = 0x4c
-	SizeofLinger            = 0x8
-	SizeofIovec             = 0x10
-	SizeofIPMreq            = 0x8
-	SizeofIPv6Mreq          = 0x14
-	SizeofMsghdr            = 0x30
-	SizeofCmsghdr           = 0xc
-// DERIVED from LP64 std tables, not C-verified on any machine.
-	SizeofInet4Pktinfo      = 0xc
-	SizeofInet6Pktinfo      = 0x14
-// DERIVED from LP64 std tables, not C-verified on any machine.
-	SizeofIPv6MTUInfo       = 0x20
-	SizeofICMPv6Filter      = 0x20
+	SizeofSockaddrInet4    = 0x10
+	SizeofSockaddrInet6    = 0x1c
+	SizeofSockaddrAny      = 0x6c
+	SizeofSockaddrUnix     = 0x6a
+	SizeofSockaddrDatalink = 0x14
+	// DERIVED from LP64 std tables, not C-verified on any machine.
+	SizeofSockaddrCtl = 0x20
+	// DERIVED from LP64 std tables, not C-verified on any machine.
+	SizeofXvsockpcb = 0xa8
+	// DERIVED from LP64 std tables, not C-verified on any machine.
+	SizeofXSocket = 0x64
+	// DERIVED from LP64 std tables, not C-verified on any machine.
+	SizeofXSockbuf = 0x18
+	// DERIVED from LP64 std tables, not C-verified on any machine.
+	SizeofXVSockPgen = 0x20
+	// DERIVED from LP64 std tables, not C-verified on any machine.
+	SizeofXucred   = 0x4c
+	SizeofLinger   = 0x8
+	SizeofIovec    = 0x10
+	SizeofIPMreq   = 0x8
+	SizeofIPv6Mreq = 0x14
+	SizeofMsghdr   = 0x30
+	SizeofCmsghdr  = 0xc
+	// DERIVED from LP64 std tables, not C-verified on any machine.
+	SizeofInet4Pktinfo = 0xc
+	SizeofInet6Pktinfo = 0x14
+	// DERIVED from LP64 std tables, not C-verified on any machine.
+	SizeofIPv6MTUInfo  = 0x20
+	SizeofICMPv6Filter = 0x20
 )
 
 const (
@@ -357,19 +357,19 @@ type FdSet struct {
 }
 
 const (
-	SizeofIfMsghdr    = 0x70
-// C-VERIFIED at ppc64 width (compile-only, Leopard gcc -arch ppc64 -m64); runs/xsys-ppc64-cc-20261028/layouts.txt
-	SizeofIfMsghdr2   = 0xa0
-	SizeofIfData      = 0x60
-// DERIVED from LP64 std tables, not C-verified on any machine.
+	SizeofIfMsghdr = 0x70
+	// C-VERIFIED at ppc64 width (compile-only, Leopard gcc -arch ppc64 -m64); runs/xsys-ppc64-cc-20261028/layouts.txt
+	SizeofIfMsghdr2 = 0xa0
+	SizeofIfData    = 0x60
+	// DERIVED from LP64 std tables, not C-verified on any machine.
 	SizeofIfData64    = 0x80
 	SizeofIfaMsghdr   = 0x14
 	SizeofIfmaMsghdr  = 0x10
 	SizeofIfmaMsghdr2 = 0x14
 	SizeofRtMsghdr    = 0x5c
-// DERIVED from LP64 std tables, not C-verified on any machine.
-	SizeofRtMsghdr2   = 0x5c
-	SizeofRtMetrics   = 0x38
+	// DERIVED from LP64 std tables, not C-verified on any machine.
+	SizeofRtMsghdr2 = 0x5c
+	SizeofRtMetrics = 0x38
 )
 
 type IfMsghdr struct {
@@ -791,6 +791,7 @@ type SysvIpcPerm struct {
 	_    uint16
 	_    int32
 }
+
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
 // DERIVED from LP64 std tables, not C-verified on any machine.
 type SysvShmDesc struct {
