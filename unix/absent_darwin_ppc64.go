@@ -45,6 +45,7 @@ const (
 // ABSENT on Leopard: no sys/vsock.h. This type is needed only so the shared
 // SockaddrVM adapter typechecks; AF_VSOCK itself is rejected by the kernel.
 // derived from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type RawSockaddrVM struct {
 	Len       uint8
 	Family    uint8
@@ -53,16 +54,20 @@ type RawSockaddrVM struct {
 	Cid       uint32
 }
 
+// DERIVED from LP64 std tables, not C-verified on any machine.
 const SizeofSockaddrVM = 0xc
 
 // ABSENT on Leopard: connectx(2) and sae_*_t do not exist; connectx returns ENOSYS.
 // derived from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type SaeAssocID uint32
 
 // derived from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type SaeConnID uint32
 
 // derived from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type SaEndpoints struct {
 	Srcif      uint32
 	Srcaddr    *RawSockaddr
@@ -74,16 +79,19 @@ type SaEndpoints struct {
 
 // ABSENT on Leopard: no struct ip_mreqn.
 // derived from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type IPMreqn struct {
 	Multiaddr [4]byte /* in_addr */
 	Address   [4]byte /* in_addr */
 	Ifindex   int32
 }
 
+// DERIVED from LP64 std tables, not C-verified on any machine.
 const SizeofIPMreqn = 0xc
 
 // ABSENT on Leopard: no TCP_CONNECTION_INFO socket option.
 // derived from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type TCPConnectionInfo struct {
 	State               uint8
 	Snd_wscale          uint8
@@ -110,4 +118,5 @@ type TCPConnectionInfo struct {
 	Txretransmitpackets uint64
 }
 
+// DERIVED from LP64 std tables, not C-verified on any machine.
 const SizeofTCPConnectionInfo = 0x70

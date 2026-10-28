@@ -156,6 +156,7 @@ type Dirent struct {
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type Attrlist struct {
 	Bitmapcount uint16
 	Reserved    uint16
@@ -216,6 +217,7 @@ type RawSockaddrAny struct {
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type RawSockaddrCtl struct {
 	Sc_len      uint8
 	Sc_family   uint8
@@ -228,6 +230,7 @@ type RawSockaddrCtl struct {
 type _Socklen uint32
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type Xucred struct {
 	Version uint32
 	Uid     uint32
@@ -275,6 +278,7 @@ type Cmsghdr struct {
 
 // ABSENT from Leopard's headers. This DERIVED-UNVERIFIED compatibility shape
 // is copied from other Darwin ports; it was not measured by ppc64 cgo on pmg5.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type Inet4Pktinfo struct {
 	Ifindex  uint32
 	Spec_dst [4]byte /* in_addr */
@@ -288,6 +292,7 @@ type Inet6Pktinfo struct {
 
 // ABSENT from Leopard's headers. This DERIVED-UNVERIFIED compatibility shape
 // is copied from other Darwin ports, not measured by ppc64 cgo on pmg5.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type IPv6MTUInfo struct {
 	Addr RawSockaddrInet6
 	Mtu  uint32
@@ -306,11 +311,17 @@ const (
 	SizeofSockaddrAny       = 0x6c
 	SizeofSockaddrUnix      = 0x6a
 	SizeofSockaddrDatalink  = 0x14
+// DERIVED from LP64 std tables, not C-verified on any machine.
 	SizeofSockaddrCtl       = 0x20
+// DERIVED from LP64 std tables, not C-verified on any machine.
 	SizeofXvsockpcb         = 0xa8
+// DERIVED from LP64 std tables, not C-verified on any machine.
 	SizeofXSocket           = 0x64
+// DERIVED from LP64 std tables, not C-verified on any machine.
 	SizeofXSockbuf          = 0x18
+// DERIVED from LP64 std tables, not C-verified on any machine.
 	SizeofXVSockPgen        = 0x20
+// DERIVED from LP64 std tables, not C-verified on any machine.
 	SizeofXucred            = 0x4c
 	SizeofLinger            = 0x8
 	SizeofIovec             = 0x10
@@ -318,8 +329,10 @@ const (
 	SizeofIPv6Mreq          = 0x14
 	SizeofMsghdr            = 0x30
 	SizeofCmsghdr           = 0xc
+// DERIVED from LP64 std tables, not C-verified on any machine.
 	SizeofInet4Pktinfo      = 0xc
 	SizeofInet6Pktinfo      = 0x14
+// DERIVED from LP64 std tables, not C-verified on any machine.
 	SizeofIPv6MTUInfo       = 0x20
 	SizeofICMPv6Filter      = 0x20
 )
@@ -345,13 +358,16 @@ type FdSet struct {
 
 const (
 	SizeofIfMsghdr    = 0x70
+// DERIVED from LP64 std tables, not C-verified on any machine.
 	SizeofIfMsghdr2   = 0xa0
 	SizeofIfData      = 0x60
+// DERIVED from LP64 std tables, not C-verified on any machine.
 	SizeofIfData64    = 0x80
 	SizeofIfaMsghdr   = 0x14
 	SizeofIfmaMsghdr  = 0x10
 	SizeofIfmaMsghdr2 = 0x14
 	SizeofRtMsghdr    = 0x5c
+// DERIVED from LP64 std tables, not C-verified on any machine.
 	SizeofRtMsghdr2   = 0x5c
 	SizeofRtMetrics   = 0x38
 )
@@ -368,6 +384,7 @@ type IfMsghdr struct {
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type IfMsghdr2 struct {
 	Msglen     uint16
 	Version    uint8
@@ -415,6 +432,7 @@ type IfData struct {
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type IfData64 struct {
 	Type       uint8
 	Typelen    uint8
@@ -492,6 +510,7 @@ type RtMsghdr struct {
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type RtMsghdr2 struct {
 	Msglen      uint16
 	Version     uint8
@@ -572,6 +591,7 @@ type Termios struct {
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type Winsize struct {
 	Row    uint16
 	Col    uint16
@@ -580,6 +600,7 @@ type Winsize struct {
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type PollFd struct {
 	Fd      int32
 	Events  int16
@@ -600,6 +621,7 @@ const (
 )
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type Utsname struct {
 	Sysname  [256]byte
 	Nodename [256]byte
@@ -608,9 +630,11 @@ type Utsname struct {
 	Machine  [256]byte
 }
 
+// DERIVED from LP64 std tables, not C-verified on any machine.
 const SizeofClockinfo = 0x14 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees).
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type Clockinfo struct {
 	Hz      int32
 	Tick    int32
@@ -620,14 +644,17 @@ type Clockinfo struct {
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type CtlInfo struct {
 	Id   uint32
 	Name [96]byte
 }
 
+// DERIVED from LP64 std tables, not C-verified on any machine.
 const SizeofKinfoProc = 0x288 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees).
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type Eproc struct {
 	Paddr   uintptr
 	Sess    uintptr
@@ -652,6 +679,7 @@ type Eproc struct {
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type ExternProc struct {
 	P_starttime Timeval
 	P_vmspace   *Vmspace
@@ -697,18 +725,21 @@ type ExternProc struct {
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type Itimerval struct {
 	Interval Timeval
 	Value    Timeval
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type KinfoProc struct {
 	Proc  ExternProc
 	Eproc Eproc
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type Vmspace struct {
 	Dummy  int32
 	Dummy2 *int8
@@ -717,6 +748,7 @@ type Vmspace struct {
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type Pcred struct {
 	Pc_lock  [72]int8
 	Pc_ucred uintptr
@@ -729,6 +761,7 @@ type Pcred struct {
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type Ucred struct {
 	Ref     int32
 	Uid     uint32
@@ -737,6 +770,7 @@ type Ucred struct {
 }
 
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type SysvIpcPerm struct {
 	Uid  uint32
 	Gid  uint32
@@ -747,6 +781,7 @@ type SysvIpcPerm struct {
 	_    int32
 }
 // DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
+// DERIVED from LP64 std tables, not C-verified on any machine.
 type SysvShmDesc struct {
 	Perm   SysvIpcPerm
 	Segsz  uint64
