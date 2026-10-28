@@ -3,13 +3,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build darwin && !ppc
+//go:build darwin && !ppc && !ppc64
 
 // Port-local split (goppc-jic6x.3): fdopendir and Getdirentries are moved
 // here unchanged from syscall_darwin.go (golang.org/x/sys v0.39.0). Leopard's
 // libSystem has no fdopendir or openat, and Go binds darwin imports at launch,
-// so darwin/ppc provides Getdirentries in syscall_darwin_ppc.go using the
-// getdirentries64 system call. Mirrors src/syscall/syscall_darwin_libcdir.go.
+// so darwin/ppc and darwin/ppc64 provide Getdirentries in their per-ABI files
+// using the getdirentries64 system call. Mirrors src/syscall/syscall_darwin_libcdir.go.
 
 package unix
 
