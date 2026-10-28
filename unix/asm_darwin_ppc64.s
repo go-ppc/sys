@@ -42,7 +42,15 @@ TEXT	·RawSyscall6(SB),NOSPLIT,$0-80
 // eight. The ninth argument is stored at 112(R1), the first parameter slot
 // past the 48-byte linkage area and the 64-byte register parameter save area
 // of the 64-bit Darwin PowerPC convention, and is ignored by the kernel. That
-// offset follows the convention and has not been observed on a G5.
+// offset follows the convention, and its runtime effect has not been observed on a
+// G5 (no 64-bit machine is available). What has been checked is the property that
+// matters for this trampoline: `go tool objdump` on a linked darwin/ppc64 image
+// shows the incoming arguments at 192(R1) and above (num at 192, a1..a8 at
+// 200..256, a9 at 264) inside a 160-byte frame, so a store to 112(R1) lands in
+// this frame's own local area — in bounds (120 <= 160) and unable to corrupt the
+// syscall number, the eight register arguments, the saved link register at 0(R1),
+// or the frame. The ppc32 body has the same shape (96-byte frame, args at
+// 120..156, store at 56). Evidence: runs/xsys-asm9-ppc64-20261028/.
 
 // func Syscall9(num, a1, a2, a3, a4, a5, a6, a7, a8, a9 uintptr) (r1, r2 uintptr, err Errno)
 TEXT	·Syscall9(SB),NOSPLIT,$128-104
