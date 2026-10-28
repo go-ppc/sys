@@ -508,6 +508,9 @@ func TestPoll(t *testing.T) {
 	chtmpdir(t)
 	f := mktmpfifo(t)
 
+	// Polling a FIFO at all is not a given: skip where the kernel refuses it.
+	skipIfPollCannotWatchFIFO(t, f)
+
 	const timeout = 100
 
 	ok := make(chan bool, 1)
