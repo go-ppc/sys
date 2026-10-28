@@ -295,10 +295,29 @@ func IoctlCtlInfo(fd int, ctlInfo *CtlInfo) error {
 }
 
 // IfreqMTU is struct ifreq used to get or set a network device's MTU.
+//
+// struct ifreq is wider than the two fields SIOCGIFMTU and SIOCSIFMTU read:
+// IFNAMSIZ bytes of ifr_name followed by a 16-byte union, 32 bytes at every
+// Darwin width. The command word carries that width (IOCPARM_LEN(SIOCGIFMTU)
+// is 32) and the kernel copies exactly that many bytes in and out — not the
+// size of the caller's object — so the rest of the union has to be part of
+// this type.
 type IfreqMTU struct {
 	Name [IFNAMSIZ]byte
 	MTU  int32
+	_    [12]byte // rest of the union, which the ioctls copy in and out
 }
+
+// ifreqMTUSize is the number of bytes the SIOCGIFMTU and SIOCSIFMTU commands
+// make the kernel copy: IOCPARM_LEN(com) = (com >> 16) & 0x1fff, the 13-bit
+// mask of xnu-1228.15.4 bsd/sys/ioccom.h:72-73 applied to the length recorded
+// in bsd/sys/sockio.h:133-134.
+const ifreqMTUSize = int(uint(SIOCGIFMTU)>>16) & 0x1fff
+
+// IfreqMTU has to be exactly as wide as the commands advertise. The pair fails
+// to compile whichever side the struct drifts to.
+var _ [ifreqMTUSize - int(unsafe.Sizeof(IfreqMTU{}))]byte
+var _ [int(unsafe.Sizeof(IfreqMTU{})) - ifreqMTUSize]byte
 
 // IoctlGetIfreqMTU performs the SIOCGIFMTU ioctl operation on fd to get the MTU
 // of the network device specified by ifname.
