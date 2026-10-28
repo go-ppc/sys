@@ -144,7 +144,7 @@ func TestFcntlInt(t *testing.T) {
 // the calling convention of each kernel.
 func TestFcntlFlock(t *testing.T) {
 	name := filepath.Join(t.TempDir(), "TestFcntlFlock")
-	fd, err := unix.Open(name, unix.O_CREAT|unix.O_RDWR, 0)
+	fd, err := unix.Open(name, unix.O_CREAT|unix.O_RDWR|flockOpenCloexec, 0)
 	if err != nil {
 		t.Fatalf("Open failed: %v", err)
 	}
