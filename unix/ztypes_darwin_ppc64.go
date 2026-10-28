@@ -10,6 +10,12 @@
 // rule. Renamed by hand (goppc-jfthk) because mkall.sh has no darwin_ppc64 target on this
 // host. Names only: sizeof and every member offset are unchanged.
 
+// Statfs_t's name arrays use byte, matching unix/mkpost.go convertStatvfsRegex.
+// The pre-mkpost Go syscall table transcribed here kept int8. Applied by hand
+// (goppc-va8wd): mkall.sh has no darwin_ppc64 target on this host. Apart from this
+// provenance note, the edit is byte-for-byte what that rule emits (including
+// mkpost's gofmt pass). Array sizes and every member offset are unchanged.
+
 //go:build darwin && ppc64
 
 package unix
@@ -106,9 +112,9 @@ type Statfs_t struct {
 	Type        uint32
 	Flags       uint32
 	Fssubtype   uint32
-	Fstypename  [16]int8
-	Mntonname   [1024]int8
-	Mntfromname [1024]int8
+	Fstypename  [16]byte
+	Mntonname   [1024]byte
+	Mntfromname [1024]byte
 	Reserved    [8]uint32
 }
 
