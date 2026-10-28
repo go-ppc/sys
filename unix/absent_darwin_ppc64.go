@@ -18,10 +18,6 @@ const (
 	_AT_FDCWD           = AT_FDCWD
 )
 
-// O_CLOEXEC is absent from Leopard's headers. Zero adds no open flags; callers
-// needing close-on-exec must set FD_CLOEXEC with fcntl after opening.
-const O_CLOEXEC = 0
-
 // F_DUPFD_CLOEXEC is absent from the Leopard 10.5.8 SDK. Keep the x/sys v0.48.0
 // command value (zerrors_darwin_amd64.go:503), so old kernels reject it with
 // EINVAL rather than treating zero as F_DUPFD and silently losing close-on-exec.
