@@ -28,6 +28,11 @@ const (
 	AT_EACCESS          = 0x10
 )
 
+// SOL_LOCAL is Darwin's local socket-option level (zero in upstream x/sys
+// v0.48.0 unix/zerrors_darwin_amd64.go:1373); XNU 10.5 has LOCAL_PEERCRED
+// (reference/xnu/bsd/sys/un.h:87).
+const SOL_LOCAL = 0
+
 // ABSENT on Leopard: no AF_VSOCK. AF_MAX is 37 (sys/socket.h:288), so a
 // socket of this family fails with EAFNOSUPPORT in the kernel.
 const AF_VSOCK = 0x28
