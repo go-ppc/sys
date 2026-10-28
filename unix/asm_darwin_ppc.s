@@ -9,7 +9,7 @@
 
 // Port-local (goppc-jic6x.3): system call support for darwin/ppc32.
 // Just jump to package syscall's implementation for all these functions.
-// darwin/ppc has no syscall.Syscall9, so unix.Syscall9 is not provided.
+// darwin/ppc has no syscall.Syscall9; unix.Syscall9 is its own trampoline in asm9_darwin_ppc.s.
 
 TEXT	·Syscall(SB),NOSPLIT,$0-28
 	JMP	syscall·Syscall(SB)
