@@ -46,9 +46,9 @@ func TestUname(t *testing.T) {
 func TestStatFieldNames(t *testing.T) {
 	var st unix.Stat_t
 	var _ *unix.Timespec
-	_ = &st.Atim
-	_ = &st.Mtim
-	_ = &st.Ctim
-	_ = int64(st.Mtim.Sec)
-	_ = int64(st.Mtim.Nsec)
+	_ = statAtim(&st)
+	_ = statMtim(&st)
+	_ = statCtim(&st)
+	_ = int64(statMtim(&st).Sec)
+	_ = int64(statMtim(&st).Nsec)
 }

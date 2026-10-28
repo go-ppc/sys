@@ -19,7 +19,7 @@ import (
 
 func archPtrSize(arch string) int {
 	switch arch {
-	case "386", "arm":
+	case "386", "arm", "ppc":
 		return 4
 	case "amd64", "arm64", "mips64", "ppc64", "riscv64":
 		return 8
