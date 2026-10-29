@@ -295,43 +295,46 @@ func IoctlCtlInfo(fd int, ctlInfo *CtlInfo) error {
 }
 
 // IfreqMTU is struct ifreq used to get or set a network device's MTU.
-//
-// struct ifreq is wider than the two fields SIOCGIFMTU and SIOCSIFMTU read:
-// IFNAMSIZ bytes of ifr_name followed by a 16-byte union, 32 bytes at every
-// Darwin width. The command word carries that width (IOCPARM_LEN(SIOCGIFMTU)
-// is 32) and the kernel copies exactly that many bytes in and out — not the
-// size of the caller's object — so the rest of the union has to be part of
-// this type.
 type IfreqMTU struct {
 	Name [IFNAMSIZ]byte
 	MTU  int32
-	_    [12]byte // rest of the union, which the ioctls copy in and out
 }
 
-// ifreqMTUSize is the number of bytes the SIOCGIFMTU and SIOCSIFMTU commands
-// make the kernel copy: IOCPARM_LEN(com) = (com >> 16) & 0x1fff, the 13-bit
-// mask of xnu-1228.15.4 bsd/sys/ioccom.h:72-73 applied to the length recorded
-// in bsd/sys/sockio.h:133-134.
-const ifreqMTUSize = int(uint(SIOCGIFMTU)>>16) & 0x1fff
+// ifreqMTUArgs includes the rest of struct ifreq's 16-byte union. Darwin's
+// ioctl copies the command's encoded length, not the size of IfreqMTU, so
+// the helpers must pass this private full-width object to the kernel.
+type ifreqMTUArgs struct {
+	Name [IFNAMSIZ]byte
+	MTU  int32
+	_    [12]byte
+}
 
-// IfreqMTU has to be exactly as wide as the commands advertise. The pair fails
-// to compile whichever side the struct drifts to.
-var _ [ifreqMTUSize - int(unsafe.Sizeof(IfreqMTU{}))]byte
-var _ [int(unsafe.Sizeof(IfreqMTU{})) - ifreqMTUSize]byte
+// IOCPARM_LEN(com) = (com >> 16) & 0x1fff, from xnu-1228.15.4
+// bsd/sys/ioccom.h:72-73. Guard both commands against drift in either direction.
+var (
+	_ [int(uint(SIOCGIFMTU)>>16)&0x1fff - int(unsafe.Sizeof(ifreqMTUArgs{}))]byte
+	_ [int(unsafe.Sizeof(ifreqMTUArgs{})) - int(uint(SIOCGIFMTU)>>16)&0x1fff]byte
+	_ [int(uint(SIOCSIFMTU)>>16)&0x1fff - int(unsafe.Sizeof(ifreqMTUArgs{}))]byte
+	_ [int(unsafe.Sizeof(ifreqMTUArgs{})) - int(uint(SIOCSIFMTU)>>16)&0x1fff]byte
+)
 
 // IoctlGetIfreqMTU performs the SIOCGIFMTU ioctl operation on fd to get the MTU
 // of the network device specified by ifname.
 func IoctlGetIfreqMTU(fd int, ifname string) (*IfreqMTU, error) {
-	var ifreq IfreqMTU
-	copy(ifreq.Name[:], ifname)
-	err := ioctlPtr(fd, SIOCGIFMTU, unsafe.Pointer(&ifreq))
-	return &ifreq, err
+	var args ifreqMTUArgs
+	copy(args.Name[:], ifname)
+	err := ioctlPtr(fd, SIOCGIFMTU, unsafe.Pointer(&args))
+	return &IfreqMTU{Name: args.Name, MTU: args.MTU}, err
 }
 
 // IoctlSetIfreqMTU performs the SIOCSIFMTU ioctl operation on fd to set the MTU
 // of the network device specified by ifreq.Name.
 func IoctlSetIfreqMTU(fd int, ifreq *IfreqMTU) error {
-	return ioctlPtr(fd, SIOCSIFMTU, unsafe.Pointer(ifreq))
+	var args *ifreqMTUArgs
+	if ifreq != nil {
+		args = &ifreqMTUArgs{Name: ifreq.Name, MTU: ifreq.MTU}
+	}
+	return ioctlPtr(fd, SIOCSIFMTU, unsafe.Pointer(args))
 }
 
 //sys	renamexNp(from string, to string, flag uint32) (err error)

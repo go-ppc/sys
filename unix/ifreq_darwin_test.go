@@ -19,16 +19,12 @@ const (
 	darwinIfreqMTUOffset  = 16
 )
 
-// Each property is checked in both directions: a negative array length does not
-// compile, a zero-length one is fine, so a layout that is wrong on only one
-// side still fails. SIOCGIFMTU's own encoded length is tied to the measured 32
-// as well, so a change in the generated tables cannot satisfy this silently.
-//
-// No ioctl is issued here: that would copy the full 32 bytes through the type,
-// and SIOCSIFMTU would change a live interface's MTU.
+// The public type retains upstream's size and offsets; only the private ioctl
+// argument spans the full union. Each equality is checked in both directions.
+// No ioctl is issued here.
 var (
-	_ [darwinIfreqSize - int(unsafe.Sizeof(IfreqMTU{}))]byte
-	_ [int(unsafe.Sizeof(IfreqMTU{})) - darwinIfreqSize]byte
+	_ [20 - int(unsafe.Sizeof(IfreqMTU{}))]byte
+	_ [int(unsafe.Sizeof(IfreqMTU{})) - 20]byte
 
 	_ [darwinIfreqNameOffset - int(unsafe.Offsetof(IfreqMTU{}.Name))]byte
 	_ [int(unsafe.Offsetof(IfreqMTU{}.Name)) - darwinIfreqNameOffset]byte
@@ -36,6 +32,12 @@ var (
 	_ [darwinIfreqMTUOffset - int(unsafe.Offsetof(IfreqMTU{}.MTU))]byte
 	_ [int(unsafe.Offsetof(IfreqMTU{}.MTU)) - darwinIfreqMTUOffset]byte
 
-	_ [darwinIfreqSize - ifreqMTUSize]byte
-	_ [ifreqMTUSize - darwinIfreqSize]byte
+	_ [darwinIfreqSize - int(unsafe.Sizeof(ifreqMTUArgs{}))]byte
+	_ [int(unsafe.Sizeof(ifreqMTUArgs{})) - darwinIfreqSize]byte
+
+	_ [darwinIfreqNameOffset - int(unsafe.Offsetof(ifreqMTUArgs{}.Name))]byte
+	_ [int(unsafe.Offsetof(ifreqMTUArgs{}.Name)) - darwinIfreqNameOffset]byte
+
+	_ [darwinIfreqMTUOffset - int(unsafe.Offsetof(ifreqMTUArgs{}.MTU))]byte
+	_ [int(unsafe.Offsetof(ifreqMTUArgs{}.MTU)) - darwinIfreqMTUOffset]byte
 )
