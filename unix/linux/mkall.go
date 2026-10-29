@@ -718,7 +718,10 @@ func (t *target) mksyscallFlags() (flags []string) {
 	}
 
 	// This flag means a 64-bit value should use (even, odd)-pair.
-	if t.GoArch == "arm" || (t.LinuxArch == "mips" && t.Bits == 32) {
+	// 32-bit PowerPC needs it too: a 64-bit argument starts on an odd GPR
+	// (r3, r5, r7, r9), i.e. an even argument index, as musl's
+	// arch/powerpc/syscall_arch.h __SYSCALL_LL_O shows.
+	if t.GoArch == "arm" || (t.LinuxArch == "mips" && t.Bits == 32) || t.GoArch == "ppc" {
 		flags = append(flags, "-arm")
 	}
 	return
