@@ -377,13 +377,13 @@ const (
 	// C-VERIFIED at ppc64 width (compile-only, Leopard gcc -arch ppc64 -m64); runs/xsys-ppc64-cc-20261028/layouts.txt
 	SizeofIfMsghdr2 = 0xa0
 	SizeofIfData    = 0x60
-	// DERIVED from LP64 std tables, not C-verified on any machine.
+	// C-VERIFIED at ppc64 width (compile-only); runs/xsys-routelayout-20261029/.
 	SizeofIfData64    = 0x80
 	SizeofIfaMsghdr   = 0x14
 	SizeofIfmaMsghdr  = 0x10
 	SizeofIfmaMsghdr2 = 0x14
 	SizeofRtMsghdr    = 0x5c
-	// DERIVED from LP64 std tables, not C-verified on any machine.
+	// C-VERIFIED at ppc64 width (compile-only); runs/xsys-routelayout-20261029/.
 	SizeofRtMsghdr2 = 0x5c
 	SizeofRtMetrics = 0x38
 )
@@ -399,12 +399,14 @@ type IfMsghdr struct {
 	Data    IfData
 }
 
-// LAYOUT C-VERIFIED at ppc64 width (compile-only) on a real Leopard machine: all 11
-// member offsets and the whole size equal C `struct if_msghdr2` under
-// `gcc -arch ppc64 -m64` (size 160); runs/xsys-off64-20261028/receipt.txt. Derived from
-// the darwin/amd64/arm64 LP64 std tables, and no object was executed — pmg5 is down.
-// DECLARED ALIGNMENT DIFFERS, BY ABI: Go claims 8 (inherited from IfData64), the
-// target's C claims 4; see the IfData64 comment for the mechanism and consequence.
+// IfMsghdr2 has the same size and member offsets as Leopard's C if_msghdr2,
+// but is not a general packed-C memory overlay at ppc64: C permits 4-byte
+// alignment while Go requires 8. A leading byte in an enclosing struct puts
+// this member at C offset 4 but Go offset 8. At ppc32 alignment also matches C.
+// This follows from net/if_var.h:142 #pragma pack(4), reset at :216, around
+// if_data64. Decode bytes or copy into Go-aligned storage; do not assume alignment.
+// The hardware behavior of a 64-bit access at a 4-aligned address is unmeasured.
+// Evidence: runs/xsys-routelayout-20261029/ (C ppc64 compile-only, never executed).
 type IfMsghdr2 struct {
 	Msglen     uint16
 	Version    uint8
@@ -451,15 +453,14 @@ type IfData struct {
 	Reserved2  uint32
 }
 
-// LAYOUT C-VERIFIED at ppc64 width (compile-only) on a real Leopard machine: all 25
-// member offsets and the whole size equal C `struct if_data64` under
-// `gcc -arch ppc64 -m64` (size 128); runs/xsys-off64-20261028/receipt.txt. Derived
-// from the darwin/amd64/arm64 LP64 std tables, and no object was executed — pmg5 is down.
-// DECLARED ALIGNMENT DIFFERS, BY ABI: Go claims 8, the target's C claims 4, because the
-// PowerPC 64-bit ABI aligns `u_int64_t` (`long long`) to 4 while Go's `uint64` is 8.
-// Offsets and size are unaffected. Consequence: if C ever places this struct at an
-// address congruent to 4 mod 8 (say, after a leading byte field in a C struct), Go's
-// 8-byte loads of the uint64 fields would trap. No such consumer path is known here.
+// IfData64 has the same size and member offsets as Leopard's C if_data64,
+// but is not a general packed-C memory overlay at ppc64: C permits 4-byte
+// alignment while Go requires 8. A leading byte in an enclosing struct puts
+// this member at C offset 4 but Go offset 8. At ppc32 alignment also matches C.
+// The mechanism is net/if_var.h:142 #pragma pack(4), reset at :216, not the
+// scalar ABI. Decode bytes or copy into Go-aligned storage; do not assume alignment.
+// The hardware behavior of a 64-bit access at a 4-aligned address is unmeasured.
+// Evidence: runs/xsys-routelayout-20261029/ (C ppc64 compile-only, never executed).
 type IfData64 struct {
 	Type       uint8
 	Typelen    uint8
@@ -536,8 +537,8 @@ type RtMsghdr struct {
 	Rmx     RtMetrics
 }
 
-// DERIVED-UNVERIFIED from darwin/amd64 LP64 (arm64 agrees); not hardware-verified at ppc64 — pmg5 is down.
-// DERIVED from LP64 std tables, not C-verified on any machine.
+// Size and all member offsets match Leopard C at ppc64 width (compile-only);
+// see runs/xsys-routelayout-20261029/. No ppc64 object was executed.
 type RtMsghdr2 struct {
 	Msglen      uint16
 	Version     uint8
